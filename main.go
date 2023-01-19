@@ -27,6 +27,24 @@ form { place-self: center; }
 </main>
 `
 
+const successHTML = `<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta http-equiv="refresh" content="10;url=/">
+<title>Success</title>
+<style>
+main { display: grid; height: 100vh; }
+div { place-self: center; }
+</style>
+<main>
+	<div>
+		<p>Upload successful.</p>
+		<small>Redirecting to home in 10s.</small>
+	</div>
+</main>
+`
+
 func sendError(w http.ResponseWriter, err error) {
 	log.Println(err)
 	w.WriteHeader(http.StatusBadRequest)
@@ -52,7 +70,8 @@ func main() {
 		for {
 			part, err := mpr.NextPart()
 			if err == io.EOF {
-				io.WriteString(w, "Upload complete.\n")
+				w.Header().Add("Content-Type", "text/html; charset=utf-8")
+				io.WriteString(w, successHTML)
 				return
 			}
 			if err != nil {
@@ -84,7 +103,7 @@ func main() {
 			log.Println("Recieved file", dstPath)
 		}
 	})
-	fmt.Printf("Serving at http://%s/ uploading to %s\n", *addr, *dir)
+	log.Printf("Serving at http://%s/ uploading to %s\n", *addr, *dir)
 	if err := http.ListenAndServe(*addr, mux); err != nil {
 		log.Fatal(err)
 	}
