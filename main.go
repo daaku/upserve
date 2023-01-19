@@ -15,10 +15,16 @@ const indexHTML = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <title>Upload</title>
-<form enctype="multipart/form-data" action="/upload" method="post">
-	<input type="file" name="file" multiple>
-	<button type="submit">Upload</button>
-</form>
+<style>
+main { display: grid; height: 100vh; }
+form { place-self: center; }
+</style>
+<main>
+	<form enctype="multipart/form-data" action="/upload" method="post">
+		<input type="file" name="file" multiple>
+		<button type="submit">Upload</button>
+	</form>
+</main>
 `
 
 func sendError(w http.ResponseWriter, err error) {
