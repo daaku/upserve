@@ -59,6 +59,10 @@ func main() {
 				sendError(w, err)
 				return
 			}
+			if err := os.MkdirAll(*dir, 0755); err != nil {
+				sendError(w, err)
+				return
+			}
 			dstPath := filepath.Join(*dir, part.FileName())
 			dst, err := os.Create(dstPath)
 			if err != nil {
